@@ -1,12 +1,10 @@
-# latex-action
+# LaTeX Music Action
 
-[![GitHub Actions Status](https://github.com/xu-cheng/latex-action/workflows/Test%20Github%20Action/badge.svg)](https://github.com/xu-cheng/latex-action/actions)
+[![GitHub Actions Status](https://github.com/lbssousa/latex-music-action/workflows/Test%20Github%20Action/badge.svg)](https://github.com/lbssousa/latex-music-action/actions)
 
-GitHub Action to compile LaTeX documents.
+GitHub Action to compile LaTeX documents, optimized for music typesetting. Currently supports [GregorioTeX](https://github.com/gregorio-project/gregorio), [abc](https://ctan.org/pkg/abc), and [lyluatex](https://github.com/jperon/lyluatex). MusixTeX and M-Tx packages are provided as well, but they are not tested yet.
 
-It runs in [a docker image](https://github.com/xu-cheng/latex-docker) with a full [TeXLive](https://www.tug.org/texlive/) environment installed.
-
-If you want to run arbitrary commands in a TeXLive environment, use [texlive-action](https://github.com/xu-cheng/texlive-action) instead.
+It runs in [a docker image](https://github.com/lbssousa/texlive-music) with a full [TeXLive](https://www.tug.org/texlive/) + [LilyPond](https://lilypond.org) environment installed.
 
 ## Inputs
 
@@ -16,7 +14,7 @@ Each input is provided as a key inside the `with` section of the action.
 
     The root LaTeX file to be compiled. This input is required. You can also pass multiple files as a multi-line string to compile multiple documents. For example:
     ```yaml
-    - uses: xu-cheng/latex-action@v2
+    - uses: lbssousa/latex-music-action@v1
       with:
         root_file: |
           file1.tex
@@ -27,7 +25,7 @@ Each input is provided as a key inside the `with` section of the action.
 
     If set, interpret the `root_file` input as bash glob pattern. For example:
     ```yaml
-    - uses: xu-cheng/latex-action@v2
+    - uses: lbssousa/latex-music-action@v1
       with:
         root_file: "*.tex"
         glob_root_file: true
@@ -49,15 +47,11 @@ Each input is provided as a key inside the `with` section of the action.
 
     The extra arguments to be passed to the LaTeX engine. By default, it is `-pdf -file-line-error -halt-on-error -interaction=nonstopmode`. This tells `latexmk` to use `pdflatex`. Refer to [`latexmk` document](http://texdoc.net/texmf-dist/doc/support/latexmk/latexmk.pdf) for more information.
 
-* `extra_system_packages`
-
-    The extra packages to be installed by [`apk`](https://pkgs.alpinelinux.org/packages) separated by space. For example, `extra_system_packages: "inkscape"` will install the package `inkscape` to allow using SVG images in your LaTeX document.
-
 * `extra_fonts`
 
     Install extra `.ttf`/`.otf` fonts to be used by `fontspec`. You can also pass multiple files as a multi-line string. Each file path will be interpreted as glob pattern. For example:
     ```yaml
-    - uses: xu-cheng/latex-action@v2
+    - uses: lbssousa/latex-music-action@v1
       with:
         root_file: main.tex
         extra_fonts: |
@@ -79,9 +73,9 @@ Each input is provided as a key inside the `with` section of the action.
 
     Instruct `latexmk` to enable `--shell-escape`.
 
-* `latexmk_use_lualatex`
+* `latexmk_use_pdflatex`
 
-    Instruct `latexmk` to use LuaLaTeX.
+    Instruct `latexmk` to use pdfLaTeX.
 
 * `latexmk_use_xelatex`
 
@@ -97,31 +91,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v2
+        uses: lbssousa/latex-music-action@v1
         with:
           root_file: main.tex
 ```
 
 ## FAQs
 
-### How to use XeLaTeX or LuaLaTeX instead of pdfLaTeX?
+### How to use XeLaTeX or pdfLaTeX instead of LuaLaTeX?
 
-By default, this action uses pdfLaTeX. If you want to use XeLaTeX or LuaLaTeX, you can set the `latexmk_use_xelatex` or `latexmk_use_lualatex` input respectively. For example:
+By default, this action uses LuaLaTeX. If you want to use XeLaTeX or pdfLaTeX, you can set the `latexmk_use_xelatex` or `latexmk_use_pdflatex` input respectively. For example:
 
 ```yaml
-- uses: xu-cheng/latex-action@v2
+- uses: lbssousa/latex-music-action@v1
   with:
     root_file: main.tex
     latexmk_use_xelatex: true
 ```
 
 ```yaml
-- uses: xu-cheng/latex-action@v2
+- uses: lbssousa/latex-music-action@v1
   with:
     root_file: main.tex
-    latexmk_use_lualatex: true
+    latexmk_use_pdflatex: true
 ```
 
 Alternatively, you could create a `.latexmkrc` file. Refer to the [`latexmk` document](http://texdoc.net/texmf-dist/doc/support/latexmk/latexmk.pdf) for more information.
@@ -131,7 +126,7 @@ Alternatively, you could create a `.latexmkrc` file. Refer to the [`latexmk` doc
 To enable `--shell-escape`, set the `latexmk_shell_escape` input.
 
 ```yaml
-- uses: xu-cheng/latex-action@v2
+- uses: lbssousa/latex-music-action@v1
   with:
     root_file: main.tex
     latexmk_shell_escape: true
@@ -143,7 +138,7 @@ The PDF file will be in the same folder as that of the LaTeX source in the CI en
 * You can use [`@actions/upload-artifact`](https://github.com/actions/upload-artifact) to upload a zip containing the PDF file to the workflow tab. For example you can add
 
   ```yaml
-  - uses: actions/upload-artifact@v2
+  - uses: actions/upload-artifact@v3
     with:
       name: PDF
       path: main.pdf
@@ -163,7 +158,7 @@ Sometimes you may have custom package (`.sty`) or class (`.cls`) files in other 
   run: |
     curl -OL https://example.com/custom_template.zip
     unzip custom_template.zip
-- uses: xu-cheng/latex-action@v2
+- uses: lbssousa/latex-music-action@v1
   with:
     root_file: main.tex
   env:
@@ -183,9 +178,13 @@ This is an upstream issue where `xindy.x86_64-linuxmusl` is currently missing in
 * Try to solve the problem by examining the build log.
 * Try to build the document locally.
 * You can also try to narrow the problem by creating a [minimal working example][mwe] to reproduce the problem.
-* [Open an issue](https://github.com/xu-cheng/latex-action/issues/new) if you need help. Please include a [minimal working example][mwe] to demonstrate your problem.
+* [Open an issue](https://github.com/lbssousa/latex-music-action/issues/new) if you need help. Please include a [minimal working example][mwe] to demonstrate your problem.
 
 [mwe]: https://tex.meta.stackexchange.com/questions/228/ive-just-been-asked-to-write-a-minimal-working-example-mwe-what-is-that
+
+## Credits
+
+This project is forked from Cheng XU's excelent [latex-action](https://github.com/xu-cheng/latex-action) project. If you like this project, please contribute to him!
 
 ## License
 
