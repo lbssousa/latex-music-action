@@ -47,6 +47,10 @@ Each input is provided as a key inside the `with` section of the action.
 
     The extra arguments to be passed to the LaTeX engine. By default, it is `-pdf -file-line-error -halt-on-error -interaction=nonstopmode`. This tells `latexmk` to use `pdflatex`. Refer to [`latexmk` document](http://texdoc.net/texmf-dist/doc/support/latexmk/latexmk.pdf) for more information.
 
+* `extra_system_packages`
+
+    The extra packages to be installed by APT separated by space. For example, `extra_system_packages: "inkscape"` will install the package `inkscape` to allow using SVG images in your LaTeX document.
+
 * `extra_fonts`
 
     Install extra `.ttf`/`.otf` fonts to be used by `fontspec`. You can also pass multiple files as a multi-line string. Each file path will be interpreted as glob pattern. For example:
@@ -71,11 +75,11 @@ Each input is provided as a key inside the `with` section of the action.
 
 * `latexmk_shell_escape`
 
-    Instruct `latexmk` to enable `--shell-escape`.
+    Instruct `latexmk` to enable `--shell-escape`. Required for use with `gregoriotex` or `lyluatex` packages.
 
-* `latexmk_use_pdflatex`
+* `latexmk_use_lualatex`
 
-    Instruct `latexmk` to use pdfLaTeX.
+    Instruct `latexmk` to use LuaLaTeX. Required for use with `gregoriotex` or `lyluatex` packages.
 
 * `latexmk_use_xelatex`
 
@@ -101,9 +105,9 @@ jobs:
 
 ## FAQs
 
-### How to use XeLaTeX or pdfLaTeX instead of LuaLaTeX?
+### How to use XeLaTeX or LuaLaTeX instead of pdfLaTeX?
 
-By default, this action uses LuaLaTeX. If you want to use XeLaTeX or pdfLaTeX, you can set the `latexmk_use_xelatex` or `latexmk_use_pdflatex` input respectively. For example:
+By default, this action uses LuaLaTeX. If you want to use XeLaTeX or LyaLaTeX, you can set the `latexmk_use_xelatex` or `latexmk_use_lualatex` input respectively. For example:
 
 ```yaml
 - uses: lbssousa/latex-music-action@v1
@@ -116,7 +120,7 @@ By default, this action uses LuaLaTeX. If you want to use XeLaTeX or pdfLaTeX, y
 - uses: lbssousa/latex-music-action@v1
   with:
     root_file: main.tex
-    latexmk_use_pdflatex: true
+    latexmk_use_lualatex: true
 ```
 
 Alternatively, you could create a `.latexmkrc` file. Refer to the [`latexmk` document](http://texdoc.net/texmf-dist/doc/support/latexmk/latexmk.pdf) for more information.
