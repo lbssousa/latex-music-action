@@ -1,5 +1,5 @@
-name: Github Action for LaTeX
-description: GitHub Action to compile LaTeX documents
+name: Github Action for LaTeX with music typesetting support
+description: GitHub Action to compile LaTeX documents. Supports music typesetting with gregoriotex, abc and lyluatex packages.
 author: Laércio de Sousa
 inputs:
   root_file:
