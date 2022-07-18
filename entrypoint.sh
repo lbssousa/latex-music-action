@@ -107,10 +107,8 @@ else
 fi
 
 if [[ -n "$extra_system_packages" ]]; then
-  for pkg in $extra_system_packages; do
-    info "Install $pkg by apk"
-    apk --no-cache add "$pkg"
-  done
+    info "Install $extra_system_packages by APT"
+    apt-get install -y $extra_system_packages
 fi
 
 if [[ -n "$extra_fonts" ]]; then
