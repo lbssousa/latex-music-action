@@ -1,5 +1,5 @@
 ARG VARIANT=lilypond
-ARG RELEASE=3.0.1
+ARG RELEASE=3.0.2
 FROM ghcr.io/lbssousa/devcontainer-texlive-music:${VARIANT}-${RELEASE}
 
 COPY \
