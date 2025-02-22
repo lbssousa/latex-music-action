@@ -1,6 +1,5 @@
-ARG VARIANT=lilypond
-ARG RELEASE=3.1.0
-FROM ghcr.io/lbssousa/devcontainer-texlive-music:${VARIANT}-${RELEASE}
+ARG RELEASE=2022.02.22
+FROM ghcr.io/lbssousa/devcontainer-texlive-lilypond:${RELEASE}
 
 COPY \
   LICENSE \
