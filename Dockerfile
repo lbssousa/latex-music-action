@@ -1,4 +1,4 @@
-ARG RELEASE=2022.02.22
+ARG RELEASE=2025.02.22
 FROM ghcr.io/lbssousa/devcontainer-texlive-lilypond:${RELEASE}
 
 COPY \
